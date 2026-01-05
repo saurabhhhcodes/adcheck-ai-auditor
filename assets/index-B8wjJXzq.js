@@ -540,13 +540,19 @@ HARD RULES:
 
 OUTPUT FORMAT:
 You must return a strictly structured JSON object adhering to the provided schema.
-Map "Recommended Fixes" to the 'corrective_instruction' field.`,responseMimeType:"application/json",responseSchema:nR}});if(l.text)return JSON.parse(l.text);throw new Error("No response text received from Gemini.")}catch(o){throw console.error("Audit failed:",o),o}},oR=async(i,t)=>{var o,l,a;try{if(!ra)throw new Error("Gemini API Key is missing. Please configure it in your environment.");const u=await ra.models.generateContent({model:"gemini-2.5-flash-image",contents:{parts:[{inlineData:{mimeType:"image/png",data:i.replace(/^data:image\/\w+;base64,/,"")}},{text:`You are an expert image editor. Edit this image to strictly comply with the following instruction: "${t}".
-            
-            IMPORTANT:
-            - Maintain the original high quality and photorealism.
-            - Do not distort products or logos.
-            - Only apply the specific changes requested in the instruction.
-            - Keep the rest of the layout identical to the original.`}]}});for(const f of((a=(l=(o=u.candidates)==null?void 0:o[0])==null?void 0:l.content)==null?void 0:a.parts)||[])if(f.inlineData)return`data:image/png;base64,${f.inlineData.data}`;throw new Error("No image generated in the response.")}catch(u){throw console.error("Fix creative failed:",u),u}},rR=[{id:"smartwatch",name:"Smartwatch / Wearable",imagePath:"./presets/smartwatch.jpg",guidelines:`Retailer: TechStyle Electronics
+Map "Recommended Fixes" to the 'corrective_instruction' field.`,responseMimeType:"application/json",responseSchema:nR}});if(l.text)return JSON.parse(l.text);throw new Error("No response text received from Gemini.")}catch(o){throw console.error("Audit failed:",o),o}},oR=async(i,t,o)=>{var l,a,u;try{if(!ra)throw new Error("Gemini API Key is missing. Please configure it in your environment.");const f=[{inlineData:{mimeType:"image/png",data:i.replace(/^data:image\/\w+;base64,/,"")}}];let h=`Act as an expert graphic designer. You have been given an ad creative that failed compliance checks.
+Your task is to EDIT the image to fix the violations based on the instructions below.
+
+INSTRUCTIONS:
+${t}
+
+CRITICAL:
+1. Return ONLY the fixed image.
+2. Maintain the highest photorealism.
+3. If a logo is provided, you MUST replace or place the logo on the product/swatch as requested, ensuring PERFECT perspective, lighting, and alignment.
+4. Do not alter other compliant elements.`;o&&(f.push({inlineData:{mimeType:"image/png",data:o.replace(/^data:image\/\w+;base64,/,"")}}),h+=`
+
+[LOGO IMAGE PROVIDED]: The second image passed is the BRAND LOGO. Use this exact logo asset. Do not hallucinate a new logo. Place it naturally on the product in the correct perspective.`),f.push({text:h});const g=await ra.models.generateContent({model:"gemini-2.0-flash-exp",contents:{role:"user",parts:f}});for(const p of((u=(a=(l=g.candidates)==null?void 0:l[0])==null?void 0:a.content)==null?void 0:u.parts)||[])if(p.inlineData)return`data:image/png;base64,${p.inlineData.data}`;throw new Error("No image generated in the response.")}catch(f){throw console.error("Fix creative failed:",f),f}},rR=[{id:"smartwatch",name:"Smartwatch / Wearable",imagePath:"./presets/smartwatch.jpg",guidelines:`Retailer: TechStyle Electronics
 
 Guidelines:
 
