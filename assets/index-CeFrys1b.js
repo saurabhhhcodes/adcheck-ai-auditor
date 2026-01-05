@@ -544,7 +544,10 @@ AUDIT LOGIC (MANDATORY):
 1. Analyze the image visually: extract logos, text, colors, products, background, symbols. Perform OCR-style text detection.
 2. Evaluate each guideline INDEPENDENTLY using only visual evidence.
 3. For color/contrast: Identify text/background colors. If contrast >= 4.5:1 cannot be confirmed visually, mark as a violation.
-4. For logos: Check presence, corner placement, opacity, overlap, and clarity.
+4. LOGO CHECK (CRITICAL):
+    - If guidelines mention a specific Brand Name (e.g., 'TechStyle', 'Glow', 'ActiveWear'), you MUST clearly see that text/logo on the product.
+    - If the product is BLANK or GENERIC (no visible text/logo), and guidelines ask for one, you MUST FAIL THE AUDIT.
+    - Violation message must be: "Missing required brand logo: [Brand Name]".
 5. For products: Ensure realistic, photographic, unwarped, not AI-stylized.
 6. Brand safety: Family-friendly, no aggressive imagery or competing brands.
 7. If image quality is insufficient, mark as undetermined/fail for safety.
@@ -558,26 +561,36 @@ HARD RULES:
 
 OUTPUT FORMAT:
 You must return a strictly structured JSON object adhering to the provided schema.
-Map "Recommended Fixes" to the 'corrective_instruction' field.`,responseMimeType:"application/json",responseSchema:nR}});if(l.text)return JSON.parse(l.text);throw new Error("No response text received from Gemini.")}catch(o){throw console.error("Audit failed:",o),o}},oR=async(i,t,o)=>{var l,a,u,f,h,g,p,y,_,S,E,R,C;try{if(!ra)throw new Error("Gemini API Key is missing. Please configure it in your environment.");const w=[{inlineData:{mimeType:"image/png",data:i.replace(/^data:image\/\w+;base64,/,"")}}];let x=`Act as an expert graphic designer. You have been given an ad creative that failed compliance checks.
-Your task is to EDIT the image to fix the violations based on the instructions below.
+Map "Recommended Fixes" to the 'corrective_instruction' field.`,responseMimeType:"application/json",responseSchema:nR}});if(l.text)return JSON.parse(l.text);throw new Error("No response text received from Gemini.")}catch(o){throw console.error("Audit failed:",o),o}},oR=async(i,t,o)=>{var l,a,u,f,h,g,p,y,_,S,E,R,C;try{if(!ra)throw new Error("Gemini API Key is missing. Please configure it in your environment.");const w=[{inlineData:{mimeType:"image/png",data:i.replace(/^data:image\/\w+;base64,/,"")}}];let x=`SYSTEM_ROLE: You are an AI Image Compliance Engine.
+    OBJECTIVE: Modify the input image to strictly adhere to retailer guidelines.
+    
+    INPUT:
+    1. Base Image (attached).
+    ${o?"2. Required Overlay Asset (attached).":""}
+    
+    ACTION REQUIRED:
+    ${t}
+    
+    EXECUTION PARAMETERS:
+    - Output Format: Image ONLY.
+    - Style: MATCH INPUT EXACTLY. Do not change lighting or background.
+    - Photorealism: HIGH.
+    
+    ${o?`
+    ASSET INTEGRATION:
+    - COMPOSITE the attached asset (Image 2) onto the product in Image 1.
+    - Perspective: ALIGN with the product surface (e.g., watch face, bottle curve).
+    - Blending: Multiply/Overlay logic for realistic print effect.
+    `:`
+    TEXT RENDERING:
+    - If the instruction requires specific brand text (e.g. "TechStyle"):
+    - RENDER the text string directly onto the object surface.
+    - Font: Standard Sans-Serif, Professional.
+    - Color: High Contrast (Black or White) depending on background.
+    `}
+    `;o&&(w.push({inlineData:{mimeType:"image/png",data:o.replace(/^data:image\/\w+;base64,/,"")}}),x+=`
 
-INSTRUCTIONS:
-${t}
-
-CRITICAL:
-1. Return ONLY the fixed image.
-2. Maintain the highest photorealism.
-3. If a logo is provided, you MUST replace or place the logo on the product/swatch as requested, ensuring PERFECT perspective, lighting, and alignment.
-4. Do not alter other compliant elements.`;o?(w.push({inlineData:{mimeType:"image/png",data:o.replace(/^data:image\/\w+;base64,/,"")}}),x+=`
-
-[LOGO IMAGE PROVIDED]: The second image passed is the BRAND LOGO. Use this exact logo asset. Do not hallucinate a new logo. Place it naturally on the product in the correct perspective.`):x+=`
-
-[NO LOGO ASSET PROVIDED]:
-      - The guidelines require the brand name to be visible, but no logo file was uploaded.
-      - VISUALLY RENDER the brand name text (e.g., from the instructions) onto the product surface.
-      - Use a clear, modern, professional font. 
-      - Look like it is printed on the physical object (watch face, bottle label, shoe side).
-      - DOES NOT need to be a complex vector logo. Just clear, legible, integrated BRAND TEXT.`,w.push({text:x});const I=await ra.models.generateContent({model:"gemini-2.0-flash-exp",contents:{role:"user",parts:w}});(h=(f=(u=(a=(l=I.candidates)==null?void 0:l[0])==null?void 0:a.content)==null?void 0:u.parts)==null?void 0:f[0])!=null&&h.text&&console.warn("Gemini returned text instead of image:",I.candidates[0].content.parts[0].text);for(const D of((y=(p=(g=I.candidates)==null?void 0:g[0])==null?void 0:p.content)==null?void 0:y.parts)||[])if(D.inlineData)return`data:image/png;base64,${D.inlineData.data}`;throw new Error(`No image generated. Model response: ${((C=(R=(E=(S=(_=I.candidates)==null?void 0:_[0])==null?void 0:S.content)==null?void 0:E.parts)==null?void 0:R[0])==null?void 0:C.text)||"Unknown error"}`)}catch(w){throw console.error("Fix creative failed:",w),w}},rR=[{id:"smartwatch",name:"Smartwatch / Wearable",imagePath:"./presets/smartwatch.jpg",guidelines:`Retailer: TechStyle Electronics.
+[SYSTEM]: Asset for integration attached.`),w.push({text:x});const I=await ra.models.generateContent({model:"gemini-2.0-flash-exp",contents:{role:"user",parts:w},generationConfig:{temperature:.2}});(h=(f=(u=(a=(l=I.candidates)==null?void 0:l[0])==null?void 0:a.content)==null?void 0:u.parts)==null?void 0:f[0])!=null&&h.text&&console.warn("Gemini Text Response:",I.candidates[0].content.parts[0].text);for(const G of((y=(p=(g=I.candidates)==null?void 0:g[0])==null?void 0:p.content)==null?void 0:y.parts)||[])if(G.inlineData)return`data:image/png;base64,${G.inlineData.data}`;const D=((C=(R=(E=(S=(_=I.candidates)==null?void 0:_[0])==null?void 0:S.content)==null?void 0:E.parts)==null?void 0:R[0])==null?void 0:C.text)||"No explanation provided.";throw new Error(`Model Refusal: ${D}`)}catch(w){throw console.error("Fix creative failed:",w),w}},rR=[{id:"smartwatch",name:"Smartwatch / Wearable",imagePath:"./presets/smartwatch.jpg",guidelines:`Retailer: TechStyle Electronics.
     1. IMAGE MUST show the "TechStyle" brand logo clearly on the watch face.
     2. Background: Minimalist grey/white studio setting.
     3. Lighting: Soft, diffused, no harsh shadows.
