@@ -1,0 +1,5 @@
+{
+  "name": "AdCheck AI Auditor",
+  "description": "Automated visual and semantic audit for ad creatives against retailer guidelines using Gemini AI.",
+  "requestFramePermissions": []
+}
