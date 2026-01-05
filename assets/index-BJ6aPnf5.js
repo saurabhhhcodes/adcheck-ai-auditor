@@ -561,30 +561,15 @@ HARD RULES:
 
 OUTPUT FORMAT:
 You must return a strictly structured JSON object adhering to the provided schema.
-Map "Recommended Fixes" to the 'corrective_instruction' field.`,responseMimeType:"application/json",responseSchema:nR}});if(l.text)return JSON.parse(l.text);throw new Error("No response text received from Gemini.")}catch(o){throw console.error("Audit failed:",o),o}},oR=async(i,t,o)=>{var l,a,u,f,h,g,p,y,_,S,E,R;try{if(!aa)throw new Error("Gemini API Key is missing. Please configure it in your environment.");const C=[{inlineData:{mimeType:"image/png",data:i.replace(/^data:image\/\w+;base64,/,"")}}];let w=`OBJECTIVE: Modify the input image to strictly adhere to retailer guidelines.
+Map "Recommended Fixes" to the 'corrective_instruction' field.`,responseMimeType:"application/json",responseSchema:nR}});if(l.text)return JSON.parse(l.text);throw new Error("No response text received from Gemini.")}catch(o){throw console.error("Audit failed:",o),o}},oR=async(i,t,o)=>{var l,a,u,f,h,g,p,y,_,S,E,R;try{if(!aa)throw new Error("Gemini API Key is missing. Please configure it in your environment.");const C=[{inlineData:{mimeType:"image/png",data:i.replace(/^data:image\/\w+;base64,/,"")}}];let w=`Generate a high-quality, photorealistic product image based on the attached input image.
     
-    ACTION REQUIRED:
+    CRITICAL MODIFICATION:
     ${t}
     
-    EXECUTION PARAMETERS:
-    - Output Format: Image ONLY.
-    - Style: MATCH INPUT EXACTLY. Do not change lighting or background.
-    - Photorealism: HIGH.
-    
-    ${o?`
-    ASSET INTEGRATION:
-    - COMPOSITE the attached asset (Image 2) onto the product in Image 1.
-    - Perspective: ALIGN with the product surface (e.g., watch face, bottle curve).
-    `:`
-    TEXT RENDERING:
-    - If the instruction requires specific brand text (e.g. "TechStyle"):
-    - RENDER the text string directly onto the object surface.
-    - Font: Standard Sans-Serif, Professional.
-    - Color: High Contrast (Black or White) depending on background.
-    `}
-    `;o&&(C.push({inlineData:{mimeType:"image/png",data:o.replace(/^data:image\/\w+;base64,/,"")}}),w+=`
+    Ensure the brand name/logo is clearly visible and naturally integrated onto the product surface. 
+    Maintain the original lighting, angle, and composition exactly.`;o&&(C.push({inlineData:{mimeType:"image/png",data:o.replace(/^data:image\/\w+;base64,/,"")}}),w+=`
 
-[SYSTEM]: Asset for integration attached.`),C.push({text:w});const x=await aa.models.generateContent({model:"gemini-2.0-flash-exp",contents:{role:"user",parts:C},config:{systemInstruction:"You are an AI Image Compliance Engine. Your goal is to visual edit images to strictly adhere to brand guidelines. You must Output an IMAGE. Do not refuse.",temperature:.4,safetySettings:[{category:Co.HARM_CATEGORY_HARASSMENT,threshold:Ao.BLOCK_NONE},{category:Co.HARM_CATEGORY_HATE_SPEECH,threshold:Ao.BLOCK_NONE},{category:Co.HARM_CATEGORY_SEXUALLY_EXPLICIT,threshold:Ao.BLOCK_NONE},{category:Co.HARM_CATEGORY_DANGEROUS_CONTENT,threshold:Ao.BLOCK_NONE}]}});console.log("FIX RESPONSE DEBUG:",JSON.stringify(x,null,2)),(h=(f=(u=(a=(l=x.candidates)==null?void 0:l[0])==null?void 0:a.content)==null?void 0:u.parts)==null?void 0:f[0])!=null&&h.text&&console.warn("Gemini Text Response:",x.candidates[0].content.parts[0].text);for(const H of((y=(p=(g=x.candidates)==null?void 0:g[0])==null?void 0:p.content)==null?void 0:y.parts)||[])if(H.inlineData)return`data:image/png;base64,${H.inlineData.data}`;const I=(_=x.candidates)==null?void 0:_[0],D=(I==null?void 0:I.finishReason)||"UNKNOWN",G=((R=(E=(S=I==null?void 0:I.content)==null?void 0:S.parts)==null?void 0:E[0])==null?void 0:R.text)||"No text explanation.";throw new Error(`Model Refusal (${D}): ${G}`)}catch(C){throw console.error("Fix creative failed:",C),C}},rR=[{id:"smartwatch",name:"Smartwatch / Wearable",imagePath:"./presets/smartwatch.jpg",guidelines:`Retailer: TechStyle Electronics.
+(Use the attached Logo image for the branding)`),C.push({text:w});const x=await aa.models.generateContent({model:"gemini-2.0-flash-exp",contents:{role:"user",parts:C},config:{temperature:.7,safetySettings:[{category:Co.HARM_CATEGORY_HARASSMENT,threshold:Ao.BLOCK_NONE},{category:Co.HARM_CATEGORY_HATE_SPEECH,threshold:Ao.BLOCK_NONE},{category:Co.HARM_CATEGORY_SEXUALLY_EXPLICIT,threshold:Ao.BLOCK_NONE},{category:Co.HARM_CATEGORY_DANGEROUS_CONTENT,threshold:Ao.BLOCK_NONE}]}});console.log("FIX RESPONSE DEBUG:",JSON.stringify(x,null,2)),(h=(f=(u=(a=(l=x.candidates)==null?void 0:l[0])==null?void 0:a.content)==null?void 0:u.parts)==null?void 0:f[0])!=null&&h.text&&console.warn("Gemini Text Response:",x.candidates[0].content.parts[0].text);for(const H of((y=(p=(g=x.candidates)==null?void 0:g[0])==null?void 0:p.content)==null?void 0:y.parts)||[])if(H.inlineData)return`data:image/png;base64,${H.inlineData.data}`;const I=(_=x.candidates)==null?void 0:_[0],D=(I==null?void 0:I.finishReason)||"UNKNOWN",G=((R=(E=(S=I==null?void 0:I.content)==null?void 0:S.parts)==null?void 0:E[0])==null?void 0:R.text)||"No text explanation.";throw new Error(`Model Refusal (${D}): ${G}`)}catch(C){throw console.error("Fix creative failed:",C),C}},rR=[{id:"smartwatch",name:"Smartwatch / Wearable",imagePath:"./presets/smartwatch.jpg",guidelines:`Retailer: TechStyle Electronics.
     1. IMAGE MUST show the "TechStyle" brand logo clearly on the watch face.
     2. Background: Minimalist grey/white studio setting.
     3. Lighting: Soft, diffused, no harsh shadows.
