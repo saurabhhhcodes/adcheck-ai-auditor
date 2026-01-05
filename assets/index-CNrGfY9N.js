@@ -550,9 +550,11 @@ CRITICAL:
 1. Return ONLY the fixed image.
 2. Maintain the highest photorealism.
 3. If a logo is provided, you MUST replace or place the logo on the product/swatch as requested, ensuring PERFECT perspective, lighting, and alignment.
-4. Do not alter other compliant elements.`;o&&(f.push({inlineData:{mimeType:"image/png",data:o.replace(/^data:image\/\w+;base64,/,"")}}),h+=`
+4. Do not alter other compliant elements.`;o?(f.push({inlineData:{mimeType:"image/png",data:o.replace(/^data:image\/\w+;base64,/,"")}}),h+=`
 
-[LOGO IMAGE PROVIDED]: The second image passed is the BRAND LOGO. Use this exact logo asset. Do not hallucinate a new logo. Place it naturally on the product in the correct perspective.`),f.push({text:h});const g=await ra.models.generateContent({model:"gemini-2.0-flash-exp",contents:{role:"user",parts:f}});for(const p of((u=(a=(l=g.candidates)==null?void 0:l[0])==null?void 0:a.content)==null?void 0:u.parts)||[])if(p.inlineData)return`data:image/png;base64,${p.inlineData.data}`;throw new Error("No image generated in the response.")}catch(f){throw console.error("Fix creative failed:",f),f}},rR=[{id:"smartwatch",name:"Smartwatch / Wearable",imagePath:"./presets/smartwatch.jpg",guidelines:`Retailer: TechStyle Electronics
+[LOGO IMAGE PROVIDED]: The second image passed is the BRAND LOGO. Use this exact logo asset. Do not hallucinate a new logo. Place it naturally on the product in the correct perspective.`):h+=`
+
+[NO LOGO ASSET PROVIDED]: If the instructions or guidelines require a brand logo (e.g., 'Ensure FreshMarket logo is visible'), and no logo asset is provided above, you MUST DESIGN and PLACE a realistic, high-quality logo for that brand name on the product. Match the style to the product category (e.g., sleek for tech, organic for food).`,f.push({text:h});const g=await ra.models.generateContent({model:"gemini-2.0-flash-exp",contents:{role:"user",parts:f}});for(const p of((u=(a=(l=g.candidates)==null?void 0:l[0])==null?void 0:a.content)==null?void 0:u.parts)||[])if(p.inlineData)return`data:image/png;base64,${p.inlineData.data}`;throw new Error("No image generated in the response.")}catch(f){throw console.error("Fix creative failed:",f),f}},rR=[{id:"smartwatch",name:"Smartwatch / Wearable",imagePath:"./presets/smartwatch.jpg",guidelines:`Retailer: TechStyle Electronics
 
 Guidelines:
 
