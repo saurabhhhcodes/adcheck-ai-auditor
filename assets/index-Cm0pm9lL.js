@@ -561,25 +561,17 @@ You must return a strictly structured JSON object adhering to the provided schem
 Map "Recommended Fixes" to the 'corrective_instruction' field.`,l=await _c(()=>aa.models.generateContent({model:"gemini-2.0-flash-exp",contents:{role:"user",parts:[{inlineData:{mimeType:"image/png",data:i.replace(/^data:image\/\w+;base64,/,"")}},{text:`Retailer Guidelines:
 ${t}
 
-Perform a strict compliance audit on this ad creative.`}]},config:{systemInstruction:o,responseMimeType:"application/json",responseSchema:iR}}));if(l.text)return JSON.parse(l.text);throw new Error("No response text received from Gemini.")}catch(o){throw console.error("Audit failed:",o),o}},rR=async(i,t,o)=>{if(!aa)throw new Error("Gemini API Key is missing.");const l=[{category:Co.HARM_CATEGORY_HARASSMENT,threshold:Ao.BLOCK_NONE},{category:Co.HARM_CATEGORY_HATE_SPEECH,threshold:Ao.BLOCK_NONE},{category:Co.HARM_CATEGORY_SEXUALLY_EXPLICIT,threshold:Ao.BLOCK_NONE},{category:Co.HARM_CATEGORY_DANGEROUS_CONTENT,threshold:Ao.BLOCK_NONE}],a=async(u=!1)=>{var f,h,g,p,y,_,S,E;try{const R=[];R.push({inlineData:{mimeType:"image/png",data:i.replace(/^data:image\/\w+;base64,/,"")}});let C="";u?C=`EDIT INSTRUCTION:
-            The previous attempt to composite a logo failed. 
-            Instead, simply RENDER THE BRAND NAME as text onto the product.
-            
-            Instruction: ${t}
-            
-            - Font: Sans-serif, bold, professional.
-            - Color: White or Black (high contrast).
-            - Placement: Prominent on the product surface.
-            - Perspective: Match the object's curvature.`:(C=`EDIT INSTRUCTION:
+Perform a strict compliance audit on this ad creative.`}]},config:{systemInstruction:o,responseMimeType:"application/json",responseSchema:iR}}));if(l.text)return JSON.parse(l.text);throw new Error("No response text received from Gemini.")}catch(o){throw console.error("Audit failed:",o),o}},rR=async(i,t,o)=>{if(!aa)throw new Error("Gemini API Key is missing.");const l=[{category:Co.HARM_CATEGORY_HARASSMENT,threshold:Ao.BLOCK_NONE},{category:Co.HARM_CATEGORY_HATE_SPEECH,threshold:Ao.BLOCK_NONE},{category:Co.HARM_CATEGORY_SEXUALLY_EXPLICIT,threshold:Ao.BLOCK_NONE},{category:Co.HARM_CATEGORY_DANGEROUS_CONTENT,threshold:Ao.BLOCK_NONE}],a=async(u=!1)=>{var f,h,g,p,y,_,S,E;try{const R=[];R.push({inlineData:{mimeType:"image/png",data:i.replace(/^data:image\/\w+;base64,/,"")}});let C="";u?C=`Add the text "${t}" to the product in this image. 
+            Maintain the original image exactly. 
+            Just overlay the text.`:(C=`EDIT INSTRUCTION:
             Composite the attached LOGO (Image 2) onto the product in Image 1.
             
             GUIDES:
             - ${t}
             - Integrate the logo naturally (perspective, lighting, curvature).
-            - Keep the product look exactly as is.`,o?R.push({inlineData:{mimeType:"image/png",data:o.replace(/^data:image\/\w+;base64,/,"")}}):C=`EDIT INSTRUCTION:
-                Render the brand name mentioned in: "${t}" onto the product surface.
-                - Use a clean, professional font. 
-                - Match perspective.`),R.push({text:C}),console.log(`Sending Fix Request (${u?"Fallback":"Primary"})...`);const x=(f=(await _c(()=>aa.models.generateContent({model:"gemini-2.0-flash-exp",contents:{role:"user",parts:R},config:{temperature:.6,safetySettings:l}}),2,5e3)).candidates)==null?void 0:f[0];for(const D of((h=x==null?void 0:x.content)==null?void 0:h.parts)||[])if(D.inlineData)return console.log(`Fix Success (${u?"Fallback":"Primary"})`),`data:image/png;base64,${D.inlineData.data}`;if(x!=null&&x.finishReason){const D=x.finishReason,G=((y=(p=(g=x.content)==null?void 0:g.parts)==null?void 0:p.find(H=>H.text))==null?void 0:y.text)||"No details";if(console.warn(`Gemini FinishReason: ${D}`),D!=="STOP"&&D!=="MAX_TOKENS")throw new Error(`Gemini Refused (${D}): ${G}`)}const I=(E=(S=(_=x==null?void 0:x.content)==null?void 0:_.parts)==null?void 0:S.find(D=>D.text))==null?void 0:E.text;throw I?new Error(`Gemini Refused (Text): ${I}`):new Error(`No image generated in ${u?"fallback":"primary"} response. Reason: ${(x==null?void 0:x.finishReason)||"Unknown"}`)}catch(R){if(console.warn(`Attempt ${u?"Fallback":"Primary"} failed:`,R.message),!u)return console.log("Triggering Fallback (Text Rendering)..."),await a(!0);throw R}};return a(!1)},lR=[{id:"smartwatch",name:"Smartwatch / Wearable",imagePath:"./presets/smartwatch.jpg",guidelines:`Retailer: TechStyle Electronics.
+            - Keep the product look exactly as is.`,o?R.push({inlineData:{mimeType:"image/png",data:o.replace(/^data:image\/\w+;base64,/,"")}}):C=`Add the text "${t}" to the product in this image. 
+                 Maintain the original image exactly. 
+                 Just overlay the text.`),R.push({text:C}),console.log(`Sending Fix Request (${u?"Fallback":"Primary"})...`);const x=(f=(await _c(()=>aa.models.generateContent({model:"gemini-2.0-flash-exp",contents:{role:"user",parts:R},config:{temperature:.6,safetySettings:l}}),2,5e3)).candidates)==null?void 0:f[0];for(const D of((h=x==null?void 0:x.content)==null?void 0:h.parts)||[])if(D.inlineData)return console.log(`Fix Success (${u?"Fallback":"Primary"})`),`data:image/png;base64,${D.inlineData.data}`;if(x!=null&&x.finishReason){const D=x.finishReason,G=((y=(p=(g=x.content)==null?void 0:g.parts)==null?void 0:p.find(H=>H.text))==null?void 0:y.text)||"No details";if(console.warn(`Gemini FinishReason: ${D}`),D!=="STOP"&&D!=="MAX_TOKENS")throw new Error(`[v2] Gemini Refused (${D}): ${G}`)}const I=(E=(S=(_=x==null?void 0:x.content)==null?void 0:_.parts)==null?void 0:S.find(D=>D.text))==null?void 0:E.text;throw I?new Error(`[v2] Gemini Refused (Text): ${I}`):new Error(`[v2] No image generated. Reason: ${(x==null?void 0:x.finishReason)||"Unknown"}`)}catch(R){if(console.warn(`Attempt ${u?"Fallback":"Primary"} failed:`,R.message),!u)return console.log("Triggering Fallback (Text Rendering)..."),await a(!0);throw R}};return a(!1)},lR=[{id:"smartwatch",name:"Smartwatch / Wearable",imagePath:"./presets/smartwatch.jpg",guidelines:`Retailer: TechStyle Electronics.
     1. IMAGE MUST show the "TechStyle" brand logo clearly on the watch face.
     2. Background: Minimalist grey/white studio setting.
     3. Lighting: Soft, diffused, no harsh shadows.
